@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Scrabble Cheat</string>
+    <string name="enter_letters">Enter Letters</string>
+    <string name="search">Search</string>
+</resources>
