@@ -23,7 +23,6 @@ class HomeViewModel : ViewModel() {
         Timber.e("search input = ${searchInput.value}")
         // results.postValue(arrayListOf())
 
-
         viewModelScope.launch(Dispatchers.IO) {
             searchInput.value?.let {
 

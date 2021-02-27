@@ -13,16 +13,14 @@ import com.samdev.scrabblecheat.model.WordResult
 class LegacyAdapter(private var list: MutableList<WordResult>, private val horizontal: Boolean = false): RecyclerView.Adapter<LegacyAdapter.LegacyViewHolder>() {
 
     private lateinit var binding: ViewDataBinding
-        /*get() {
-            return if (horizontal) {
-                binding as ItemLetterScoreBinding
-            } else binding as ItemResultBinding
-        }*/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LegacyViewHolder {
         binding = if (horizontal) {
             ItemLetterScoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        } else ItemResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        } else {
+            ItemResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        }
+
         return LegacyViewHolder(binding)
     }
 
@@ -47,6 +45,9 @@ class LegacyAdapter(private var list: MutableList<WordResult>, private val horiz
             } else {
                 (binding as ItemResultBinding).result = item
             }
+
+            // pending binding
+            binding.executePendingBindings()
 
 
             setOnClickListener {

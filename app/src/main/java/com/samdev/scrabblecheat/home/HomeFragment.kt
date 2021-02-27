@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.samdev.scrabblecheat.R
 import com.samdev.scrabblecheat.databinding.FragmentHomeBinding
 import com.samdev.scrabblecheat.home.adapter.LegacyAdapter
-import com.samdev.scrabblecheat.home.adapter.LetterScoreAdapter
 import com.samdev.scrabblecheat.home.adapter.ResultsAdapter
 import com.samdev.scrabblecheat.utils.ScoreComparator
 import timber.log.Timber
@@ -38,15 +37,37 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupLetterScore()
         observeResult()
     }
 
+    /**
+     * Display each letter and score assigned to it
+     */
+    private fun setupLetterScore() {
+        // val letterScoreAdapter = LegacyAdapter(mutableListOf(), true) // LetterScoreAdapter()
+        val letterScoreAdapter = ResultsAdapter(true)
+        binding.rvScoreboard.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        binding.rvScoreboard.adapter = letterScoreAdapter
 
+        viewModel.letterScores.observe(viewLifecycleOwner, {
+            it?.let {
+                //letterScoreAdapter.updateList(it)
+                letterScoreAdapter.submitList(it)
+            }
+        })
+    }
+
+    /**
+     * Display each possible word that can be formed from the letters
+     * provided
+     */
     private fun observeResult() {
-        val resultsAdapter = LegacyAdapter(mutableListOf(), false) //ResultsAdapter()
+        // val resultsAdapter = LegacyAdapter(mutableListOf(), false)
+        val resultsAdapter = ResultsAdapter(false)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = resultsAdapter
 
@@ -54,21 +75,8 @@ class HomeFragment : Fragment() {
             it?.let {
                 Timber.e("received (listSize=${it.size}) list => $it")
                 Collections.sort(it, ScoreComparator())
-                // resultsAdapter.submitList(it)
-                resultsAdapter.updateList(it)
-            }
-        })
-    }
-
-    private fun setupLetterScore() {
-        val letterScoreAdapter = LegacyAdapter(mutableListOf(), true) // LetterScoreAdapter()
-        binding.rvScoreboard.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        binding.rvScoreboard.adapter = letterScoreAdapter
-
-        viewModel.letterScores.observe(viewLifecycleOwner, {
-            it?.let {
-                // letterScoreAdapter.submitList(it)
-                letterScoreAdapter.updateList(it)
+                // resultsAdapter.updateList(it)
+                resultsAdapter.submitList(it)
             }
         })
     }

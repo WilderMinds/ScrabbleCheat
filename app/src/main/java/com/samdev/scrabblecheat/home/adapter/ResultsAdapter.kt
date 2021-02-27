@@ -5,15 +5,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.ViewDataBinding
+import com.samdev.scrabblecheat.databinding.ItemLetterScoreBinding
 import com.samdev.scrabblecheat.databinding.ItemResultBinding
 import com.samdev.scrabblecheat.model.WordResult
 
-class ResultsAdapter : ListAdapter<WordResult, ResultsAdapter.ItemViewHolder>(DiffCallback()) {
+class ResultsAdapter(var horizontal: Boolean = false) : ListAdapter<WordResult, ResultsAdapter.ItemViewHolder>(DiffCallback()) {
 
-    private lateinit var binding: ItemResultBinding
+    private lateinit var binding: ViewDataBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        binding = ItemResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = if (horizontal) {
+            ItemLetterScoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        } else {
+            ItemResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        }
         return ItemViewHolder(binding)
     }
 
@@ -31,11 +37,17 @@ class ResultsAdapter : ListAdapter<WordResult, ResultsAdapter.ItemViewHolder>(Di
         return position
     }
 
-    inner class ItemViewHolder(binding: ItemResultBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ItemViewHolder(binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: WordResult) = with(itemView) {
+            if (horizontal) {
+                (binding as ItemLetterScoreBinding).letter = item
+            } else {
+                (binding as ItemResultBinding).result = item
+            }
 
-            binding.result = item
+            // pending binding
+            binding.executePendingBindings()
 
             setOnClickListener {
                 // TODO: Handle on click (Maybe View word definition)
