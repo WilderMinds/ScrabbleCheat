@@ -1,16 +1,19 @@
 package com.samdev.scrabblecheat.home.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.samdev.scrabblecheat.R
 import com.samdev.scrabblecheat.databinding.ItemLetterScoreBinding
 import com.samdev.scrabblecheat.databinding.ItemResultBinding
+import com.samdev.scrabblecheat.home.ItemClickListener
 import com.samdev.scrabblecheat.model.WordResult
 
-class LegacyAdapter(private var list: MutableList<WordResult>, private val horizontal: Boolean = false): RecyclerView.Adapter<LegacyAdapter.LegacyViewHolder>() {
+class LegacyAdapter(
+    private var list: MutableList<WordResult>,
+    private val horizontal: Boolean = false,
+    private val clickListener: ItemClickListener
+) : RecyclerView.Adapter<LegacyAdapter.LegacyViewHolder>() {
 
     private lateinit var binding: ViewDataBinding
 
@@ -38,7 +41,15 @@ class LegacyAdapter(private var list: MutableList<WordResult>, private val horiz
         notifyDataSetChanged()
     }
 
-    inner class LegacyViewHolder(binding: ViewDataBinding): RecyclerView.ViewHolder(binding.root) {
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
+    inner class LegacyViewHolder(binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: WordResult) = with(itemView) {
             if (horizontal) {
                 (binding as ItemLetterScoreBinding).letter = item
@@ -51,7 +62,9 @@ class LegacyAdapter(private var list: MutableList<WordResult>, private val horiz
 
 
             setOnClickListener {
-
+                if (!horizontal) {
+                    clickListener.onItemClicked(item)
+                }
             }
         }
     }

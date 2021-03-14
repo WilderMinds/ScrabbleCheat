@@ -1,4 +1,4 @@
-package com.samdev.scrabblecheat
+package com.samdev.scrabblecheat.utils
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView

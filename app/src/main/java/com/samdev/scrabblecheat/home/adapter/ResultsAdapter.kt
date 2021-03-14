@@ -1,16 +1,17 @@
 package com.samdev.scrabblecheat.home.adapter
 
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.samdev.scrabblecheat.databinding.ItemLetterScoreBinding
 import com.samdev.scrabblecheat.databinding.ItemResultBinding
+import com.samdev.scrabblecheat.home.ItemClickListener
 import com.samdev.scrabblecheat.model.WordResult
 
-class ResultsAdapter(var horizontal: Boolean = false) : ListAdapter<WordResult, ResultsAdapter.ItemViewHolder>(DiffCallback()) {
+class ResultsAdapter(var horizontal: Boolean = false, private val clickListener: ItemClickListener) : ListAdapter<WordResult, ResultsAdapter.ItemViewHolder>(DiffCallback()) {
 
     private lateinit var binding: ViewDataBinding
 
@@ -50,7 +51,9 @@ class ResultsAdapter(var horizontal: Boolean = false) : ListAdapter<WordResult, 
             binding.executePendingBindings()
 
             setOnClickListener {
-                // TODO: Handle on click (Maybe View word definition)
+                if (!horizontal) {
+                    clickListener.onItemClicked(item)
+                }
             }
         }
     }
