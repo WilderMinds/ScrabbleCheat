@@ -42,11 +42,11 @@ class LegacyAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return position.toLong()
+        return list[position].hashCode().toLong()
     }
 
     override fun getItemViewType(position: Int): Int {
-        return position
+        return 0
     }
 
     inner class LegacyViewHolder(binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {

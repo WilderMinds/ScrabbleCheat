@@ -3,7 +3,6 @@ package com.samdev.scrabblecheat.utils
 import com.samdev.scrabblecheat.App
 import com.samdev.scrabblecheat.R
 import java.io.BufferedReader
-import java.io.File
 import java.io.InputStreamReader
 
 class WordsUtil {
@@ -37,13 +36,6 @@ class WordsUtil {
             Pair("Y", 4),
             Pair("Z", 10)
     )
-
-    fun readFileAsLinesUsingBufferedReader(): List<String> {
-        val fileName = javaClass.getResource("dictionary.txt").file
-        println("class is $fileName")
-        return File(fileName).bufferedReader().readLines()
-    }
-
 
     fun readFileFromRaw(): List<String> {
         val resources = App.instance.resources

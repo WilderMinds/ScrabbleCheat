@@ -10,6 +10,7 @@ import com.samdev.scrabblecheat.databinding.ItemLetterScoreBinding
 import com.samdev.scrabblecheat.databinding.ItemResultBinding
 import com.samdev.scrabblecheat.home.ItemClickListener
 import com.samdev.scrabblecheat.model.WordResult
+import timber.log.Timber
 
 class ResultsAdapter(var horizontal: Boolean = false, private val clickListener: ItemClickListener) : ListAdapter<WordResult, ResultsAdapter.ItemViewHolder>(DiffCallback()) {
 
@@ -21,7 +22,7 @@ class ResultsAdapter(var horizontal: Boolean = false, private val clickListener:
         } else {
             ItemResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         }
-        return ItemViewHolder(binding)
+        return ItemViewHolder(binding, horizontal, clickListener)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -31,14 +32,29 @@ class ResultsAdapter(var horizontal: Boolean = false, private val clickListener:
     }
 
     override fun getItemId(position: Int): Long {
-        return position.toLong()
+        return getItem(position)?.hashCode()?.toLong() ?: position.toLong()
     }
 
     override fun getItemViewType(position: Int): Int {
-        return position
+        return 0
     }
 
-    inner class ItemViewHolder(binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    override fun onCurrentListChanged(
+        previousList: MutableList<WordResult>,
+        currentList: MutableList<WordResult>
+    ) {
+        super.onCurrentListChanged(previousList, currentList)
+
+        Timber.e("previousList -> $previousList")
+        Timber.e("currentList -> $currentList")
+    }
+
+    class ItemViewHolder(
+        private val binding: ViewDataBinding,
+        private val horizontal: Boolean,
+        private val clickListener: ItemClickListener
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: WordResult) = with(itemView) {
             if (horizontal) {

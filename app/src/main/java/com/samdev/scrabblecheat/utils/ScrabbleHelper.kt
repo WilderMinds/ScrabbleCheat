@@ -26,7 +26,7 @@ class ScrabbleHelper(private var input: String, private val allowTwoLetterWords:
      * to the input string.
      *
      * eg: if we have inputString "abcd", we do not want the algorithm going
-     * through the 'e' - 'f' section of the dictionary, as its a waste of resources.
+     * through the 'e' - 'z' section of the dictionary, as its a waste of resources.
      * Hence we trim.
      */
     private fun trimDictionary(entireDictionary: List<String>): List<String> {
@@ -70,7 +70,13 @@ class ScrabbleHelper(private var input: String, private val allowTwoLetterWords:
         for (it in dictionary) {
 
             // avoid incorrect matches due to letter-case variance
-            val word = it.toLowerCase()
+            val word = it.toLowerCase(Locale.ROOT)
+
+            // avoid search through unnecessary aspects of the dictionary
+            val startLetterDicWord = word[0]
+            if (!input.contains(startLetterDicWord, ignoreCase = true)) {
+               continue
+            }
 
             // length of letters in the current dictionary word
             val lengthOfWord = word.length
@@ -108,9 +114,7 @@ class ScrabbleHelper(private var input: String, private val allowTwoLetterWords:
                     break
                 }
             }
-
         }
-
 
         prettyPrint(input, result)
         return result
@@ -195,8 +199,7 @@ class ScrabbleHelper(private var input: String, private val allowTwoLetterWords:
 
 
     private fun prettyPrint(input: String, result: MutableSet<WordResult>) {
-        println("Input String => $input")
-        println("\n")
+        println("Input String => $input \n")
 
         val resultArray = ArrayList(result)
 
@@ -207,17 +210,6 @@ class ScrabbleHelper(private var input: String, private val allowTwoLetterWords:
             println("score => ${it.score}")
             println("")
         }
-    }
-
-
-    /**
-     * This method can only be invoked when, inputString length > 8
-     * User has fewer letters in his rack and picks a random letter
-     * from the sack and adds to his
-     */
-    @Deprecated(message = "User can always give a new input string and call the 'generate()' method again")
-    private fun desperateAction() {
-
     }
 }
 

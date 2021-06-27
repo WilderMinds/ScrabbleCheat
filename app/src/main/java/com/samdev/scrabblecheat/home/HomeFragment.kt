@@ -78,7 +78,6 @@ class HomeFragment : Fragment(), ItemClickListener {
      * provided
      */
     private fun observeResult() {
-        //val resultsAdapter = LegacyAdapter(mutableListOf(), false)
         val resultsAdapter = ResultsAdapter(false, this)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = resultsAdapter
@@ -88,7 +87,6 @@ class HomeFragment : Fragment(), ItemClickListener {
             it?.let {
                 Timber.e("received (listSize=${it.size}) list => $it")
                 Collections.sort(it, ScoreComparator())
-                // resultsAdapter.updateList(it)
                 resultsAdapter.submitList(it)
             }
         })

@@ -13,6 +13,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -83,7 +84,7 @@ class WebViewFragment : BottomSheetDialogFragment() {
                             // webview content and cannot scroll anymore.
                             // Hence, we allow the bottomsheet to do its thing and collapse
                             if (newState == BottomSheetBehavior.STATE_DRAGGING && mCurrentWebViewScrollY > 0) {
-                                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                                behavior.state = BottomSheetBehavior.STATE_EXPANDED
                             }
                         }
                     })
@@ -150,8 +151,21 @@ class WebViewFragment : BottomSheetDialogFragment() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 Timber.e("page started => $url")
+                showProgress()
             }
         }
+    }
+
+    /**
+     * Indicate that loading is in progress
+     *
+     * We first change the visibility before setting interminate=true, because of
+     * java.lang.IllegalStateException: Cannot switch to indeterminate mode while the progress indicator is visible.
+     */
+    private fun showProgress() {
+        binding.progress.isVisible = false
+        binding.progress.isIndeterminate = true
+        binding.progress.isVisible = true
     }
 
 
@@ -164,7 +178,7 @@ class WebViewFragment : BottomSheetDialogFragment() {
 
 
     /**
-     * Listen for selected word and seach the definition
+     * Listen for selected word and search the definition
      */
     private fun observeSearchWord() {
         viewModel.selectedWord.observe(viewLifecycleOwner, {

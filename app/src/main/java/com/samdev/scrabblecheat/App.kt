@@ -42,8 +42,11 @@ class App: Application() {
 
 
     fun generateDictionaryUrl(word: String): String {
-        val queryUrl = "https://www.collinsdictionary.com/dictionary/english/$word"
-        //val queryUrl = "https://www.google.com/search?q=dictionary&ie=UTF-8#dobs=$word"
+        // val queryUrl = "https://www.collinsdictionary.com/dictionary/english/$word"
+        // val queryUrl = "https://www.merriam-webster.com/dictionary/$word"
+        //val queryUrl = "https://scrabblewordfinder.org/dictionary/$word"
+        // val queryUrl = "https://www.google.com/search?q=dictionary&ie=UTF-8#dobs=$word"
+        val queryUrl = "https://word.tips/dictionary/$word"
 
         return queryUrl
     }

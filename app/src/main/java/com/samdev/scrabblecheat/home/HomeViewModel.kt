@@ -24,9 +24,9 @@ class HomeViewModel : ViewModel() {
 
 
     init {
-        allow2LetterWords.postValue(false)
-        connected.postValue(false)
-        loading.postValue(false)
+        allow2LetterWords.value = false
+        connected.value = false
+        loading.value = false
     }
 
 
